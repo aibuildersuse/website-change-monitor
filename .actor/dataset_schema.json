@@ -1,0 +1,66 @@
+{
+  "$schema": "https://apify.com/schemas/v1/dataset.ide.json",
+  "actorSpecification": 1,
+  "fields": {
+    "type": "object",
+    "properties": {
+      "url": { "type": "string" },
+      "label": { "type": ["string", "null"] },
+      "selector": { "type": ["string", "null"] },
+      "contentMode": { "type": ["string", "null"] },
+      "changeType": {
+        "type": "string",
+        "enum": ["baseline", "no_change", "content_changed", "selector_not_found", "fetch_error", "empty_content"]
+      },
+      "addedText": { "type": "array", "items": { "type": "string" } },
+      "removedText": { "type": "array", "items": { "type": "string" } },
+      "addedCount": { "type": ["integer", "null"] },
+      "removedCount": { "type": ["integer", "null"] },
+      "lineCount": { "type": ["integer", "null"] },
+      "textHash": { "type": ["string", "null"] },
+      "summary": { "type": "string" },
+      "pageTitle": { "type": ["string", "null"] },
+      "fetchMethod": { "type": ["string", "null"] },
+      "checkedAt": { "type": "string" },
+      "previousCheckedAt": { "type": ["string", "null"] },
+      "snapshotKey": { "type": ["string", "null"] },
+      "error": { "type": ["string", "null"] }
+    },
+    "required": ["url", "changeType", "summary", "checkedAt"]
+  },
+  "views": {
+    "changes": {
+      "title": "Changes",
+      "transformation": {
+        "fields": ["changeType", "url", "addedCount", "removedCount", "summary", "checkedAt", "previousCheckedAt"]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "changeType": { "label": "Change", "format": "text" },
+          "url": { "label": "Page", "format": "link" },
+          "addedCount": { "label": "Added", "format": "number" },
+          "removedCount": { "label": "Removed", "format": "number" },
+          "summary": { "label": "Summary", "format": "text" },
+          "checkedAt": { "label": "Checked at", "format": "date" },
+          "previousCheckedAt": { "label": "Compared with", "format": "date" }
+        }
+      }
+    },
+    "details": {
+      "title": "Diff details",
+      "transformation": {
+        "fields": ["url", "changeType", "addedText", "removedText"]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "url": { "label": "Page", "format": "link" },
+          "changeType": { "label": "Change", "format": "text" },
+          "addedText": { "label": "Added", "format": "array" },
+          "removedText": { "label": "Removed", "format": "array" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://apify.com/schemas/v1/actor.ide.json",
+  "actorSpecification": 1,
+  "name": "website-change-monitor",
+  "title": "Website Change Monitor",
+  "description": "Watch any webpage (or a CSS/JSON selector on it) and get a structured text diff when content changes. Keeps state between runs and can alert Slack, Discord, Zapier, Make or n8n. For SaaS pricing pages, prefer Pricing Page Change Monitor.",
+  "version": "0.1",
+  "buildTag": "latest",
+  "meta": {
+    "templateId": "python-playwright",
+    "generatedBy": "Grok Bot"
+  },
+  "defaultMemoryMbytes": 512,
+  "minMemoryMbytes": 512,
+  "maxMemoryMbytes": 4096,
+  "defaultRunOptions": {
+    "build": "latest",
+    "memoryMbytes": 512,
+    "timeoutSecs": 1800
+  },
+  "storages": {
+    "dataset": "./dataset_schema.json"
+  },
+  "dockerfile": "../Dockerfile",
+  "inputSchema": "./input_schema.json",
+  "outputSchema": "./output_schema.json"
+}

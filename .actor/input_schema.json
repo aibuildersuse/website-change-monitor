@@ -1,0 +1,142 @@
+{
+  "$schema": "https://apify.com/schemas/v1/input.ide.json",
+  "title": "Website Change Monitor input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "urls": {
+      "title": "URLs to watch",
+      "type": "array",
+      "description": "Any pages to monitor for content changes. Optional per-URL CSS selector or label: {\"url\": \"...\", \"selector\": \"#main\"}. Not specialized for SaaS pricing cards \u2014 use Pricing Page Change Monitor for that.",
+      "editor": "requestListSources",
+      "prefill": [
+        {
+          "url": "https://example.com/"
+        },
+        {
+          "url": "https://news.ycombinator.com/"
+        },
+        {
+          "url": "https://httpbin.org/html"
+        }
+      ]
+    },
+    "cssSelector": {
+      "title": "CSS selector (optional)",
+      "type": "string",
+      "description": "Limit the watched region to this CSS selector, e.g. main, #content, article. Per-URL selector overrides this. Leave empty to watch visible text of the whole page.",
+      "editor": "textfield",
+      "nullable": true
+    },
+    "contentMode": {
+      "title": "Content mode",
+      "type": "string",
+      "description": "text extracts visible text lines (default). json treats the response as JSON and flattens key paths for diffing (useful for APIs). html_text is an alias of text.",
+      "editor": "select",
+      "enum": [
+        "text",
+        "json",
+        "html_text"
+      ],
+      "enumTitles": [
+        "Visible text (default)",
+        "JSON flatten",
+        "HTML text (same as text)"
+      ],
+      "default": "text"
+    },
+    "renderMode": {
+      "title": "Page rendering",
+      "type": "string",
+      "description": "auto uses HTTP first and falls back to a headless browser when the page looks empty or blocked. http never uses a browser. browser always renders with Chromium.",
+      "editor": "select",
+      "enum": [
+        "auto",
+        "http",
+        "browser"
+      ],
+      "enumTitles": [
+        "Auto (HTTP first, browser fallback)",
+        "HTTP only",
+        "Always use a browser"
+      ],
+      "default": "auto"
+    },
+    "includeUnchanged": {
+      "title": "Output a row for unchanged pages",
+      "type": "boolean",
+      "default": true,
+      "description": "When on, pages without changes get one no_change row so every run shows what was checked. Turn off to output only real changes."
+    },
+    "ignoreTextPatterns": {
+      "title": "Ignore text matching (regex)",
+      "type": "array",
+      "description": "Lines matching these regexes are ignored when comparing (timestamps, counters, ads).",
+      "editor": "stringList",
+      "default": [],
+      "prefill": [
+        "\u00a9\\s*\\d{4}",
+        "\\d{1,2}:\\d{2}(:\\d{2})?",
+        "\\d+\\s*(views?|comments?)"
+      ]
+    },
+    "maxDiffLines": {
+      "title": "Max added/removed lines in output",
+      "type": "integer",
+      "description": "Cap how many added/removed lines are included per change row.",
+      "minimum": 5,
+      "maximum": 200,
+      "default": 40
+    },
+    "webhookUrl": {
+      "title": "Webhook URL (optional)",
+      "type": "string",
+      "editor": "textfield",
+      "nullable": true,
+      "description": "If set, the Actor POSTs one JSON payload with all detected changes after the run (only when something changed). Works with Slack and Discord incoming webhooks."
+    },
+    "webhookHeaders": {
+      "title": "Webhook headers (optional)",
+      "type": "object",
+      "editor": "json",
+      "default": {},
+      "description": "Extra HTTP headers to send with the webhook, for example an Authorization header."
+    },
+    "webhookOnBaseline": {
+      "title": "Send webhook for first-run baselines",
+      "type": "boolean",
+      "default": false,
+      "description": "By default the first run of a URL only saves a baseline and does not notify. Turn on to also send baseline rows to the webhook."
+    },
+    "stateStoreName": {
+      "title": "State store name",
+      "type": "string",
+      "editor": "textfield",
+      "default": "website-change-monitor-state",
+      "description": "Name of the key-value store in your account where page snapshots are kept between runs. Letters, digits and hyphens only."
+    },
+    "maxConcurrency": {
+      "title": "Max parallel pages",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 3,
+      "description": "How many pages to check at the same time. Keep it low (1-3) on small memory."
+    },
+    "proxyConfiguration": {
+      "title": "Proxy configuration",
+      "type": "object",
+      "editor": "proxy",
+      "prefill": {
+        "useApifyProxy": false
+      },
+      "default": {
+        "useApifyProxy": false
+      },
+      "description": "Optional. Most pages load without a proxy. Use Apify Proxy only if a site blocks the default IPs."
+    }
+  },
+  "required": [
+    "urls"
+  ]
+}
